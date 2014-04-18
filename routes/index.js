@@ -9,6 +9,7 @@ var request = require('request'); // library to make requests to remote urls
 
 var moment = require("moment"); // date manipulation library
 var astronautModel = require("../models/astronaut.js"); //db model
+var reminderModel = require("../models/reminder.js"); //db model
 
 
 /*
@@ -26,17 +27,23 @@ exports.index = function(req, res) {
 	//    err will include any error that occurred
 	//	  allAstros is our resulting array of astronauts
 	astronautModel.find({}, 'name slug source', function(err, allAstros){
+	reminderModel.find({}, 'name slug source', function(err, allReminds){
 
 		if (err) {
 			res.send("Unable to query database for astronauts").status(500);
 		};
 
 		console.log("retrieved " + allAstros.length + " astronauts from database");
+		console.log("retrieved " + allReminds.length + " astronauts from database");
 
 		//build and render template
 		var templateData = {
 			astros : allAstros,
 			pageTitle : "NASA Astronauts (" + allAstros.length + ")"
+		}
+		var templateData = {
+			reminder : allReminds,
+			pageTitle : "Reminders (" + allReminds.length + ")"
 		}
 
 		res.render('index.html', templateData);
@@ -48,16 +55,30 @@ exports.index = function(req, res) {
 exports.data_all = function(req, res) {
 
 	astroQuery = astronautModel.find({}); // query for all astronauts
+	reminderQuery = reminderModel.find({}); // query for all astronauts
+
 	astroQuery.sort('-birthdate');
 	
 	// display only 3 fields from astronaut data
 	astroQuery.select('name photo birthdate');
+	reminderQuery.select('reminder reminderDate tags');
 	
 	astroQuery.exec(function(err, allAstros){
 		// prepare data for JSON
 		var jsonData = {
 			status : 'OK',
 			astros : allAstros
+			
+		}
+
+		res.json(jsonData);
+	});
+
+	reminderQuery.exec(function(err, allReminds){
+		// prepare data for JSON
+		var jsonData = {
+			status : 'OK',
+			reminder : allReminds
 			
 		}
 
@@ -75,6 +96,7 @@ exports.detail = function(req, res) {
 
 	//get the requested astronaut by the param on the url :astro_id
 	var astro_id = req.params.astro_id;
+	var reminder_id = req.params.reminder_id;
 
 	// query the database for astronaut
 	var astroQuery = astronautModel.findOne({slug:astro_id});
@@ -108,6 +130,47 @@ exports.detail = function(req, res) {
 				astro : currentAstronaut,
 				astros : allAstros,
 				pageTitle : currentAstronaut.name
+			}
+
+			// render and return the template
+			res.render('detail.html', templateData);
+
+
+		}) // end of .find (all) query
+		
+	}); // end of .findOne query
+
+	var reminderQuery = reminderModel.findOne({slug:reminder_id});
+	reminderQuery.exec(function(err, currentReminder){
+
+		if (err) {
+			return res.status(500).send("There was an error on the astronaut query");
+		}
+
+		if (currentReminder == null) {
+			return res.status(404).render('404.html');
+		}
+
+		console.log("Found astro");
+		console.log(currentReminder.name);
+
+		// formattedBirthdate function for currentAstronaut
+		currentReminder.formattedDate = function() {
+			// formatting a JS date with moment
+			// http://momentjs.com/docs/#/displaying/format/
+            return moment(this.date).format("dddd, MMMM Do YYYY");
+        };
+		
+		//query for all astronauts, return only name and slug
+		reminderModel.find({}, 'name slug', function(err, allReminds){
+
+			console.log("retrieved all reminders : " + allReminds.length);
+
+			//prepare template data for view
+			var templateData = {
+				astro : currentReminder,
+				astros : allReminds,
+				pageTitle : currentReminder.name
 			}
 
 			// render and return the template
@@ -158,6 +221,45 @@ exports.data_detail = function(req, res) {
 
 	}); // end of .findOne query
 
+
+
+
+	console.log("detail page requested for " + req.params.reminder_id);
+
+	//get the requested astronaut by the param on the url :astro_id
+	var reminder_id = req.params.reminder_id;
+
+	// query the database for astronaut
+	var reminderQuery = reminderModel.findOne({slug:reminder_id});
+	astroQuery.exec(function(err, currentReminder){
+
+		if (err) {
+			return res.status(500).send("There was an error on the reminder query");
+		}
+
+		if (currentReminder == null) {
+			return res.status(404).render('404.html');
+		}
+
+
+		// formattedBirthdate function for currentAstronaut
+		currentReminder.formatteddate = function() {
+			// formatting a JS date with moment
+			// http://momentjs.com/docs/#/displaying/format/
+            return moment(this.date).format("dddd, MMMM Do YYYY");
+        };
+		
+		//prepare JSON data for response
+		var jsonData = {
+			reminder : currentReminder,
+			status : 'OK'
+		}
+
+		// return JSON to requestor
+		res.json(jsonData);
+
+	}); // end of .findOne query
+
 }
 
 /*
@@ -167,6 +269,15 @@ exports.astroForm = function(req, res){
 
 	var templateData = {
 		page_title : 'Enlist a new astronaut'
+	};
+
+	res.render('create_form.html', templateData);
+}
+
+exports.reminderForm = function(req, res){
+
+	var templateData = {
+		page_title : 'Enlist a new Reminder'
 	};
 
 	res.render('create_form.html', templateData);
@@ -191,6 +302,7 @@ exports.createAstro = function(req, res) {
 		slug : req.body.name.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
 
 	});
+	
 
 	// you can also add properties with the . (dot) notation
 	if (req.body.birthdate) {
@@ -229,6 +341,59 @@ exports.createAstro = function(req, res) {
 	});
 };
 
+
+/*
+	POST /create
+*/
+exports.createReminder = function(req, res) {
+
+	console.log("received form submission");
+	console.log(req.body);
+
+	// accept form post data
+	var newReminder = new reminderModel({
+		name : req.body.name,
+		photo : req.body.photoUrl,
+		source : {
+			name : req.body.source_name,
+			url : req.body.source_url
+		},
+		slug : req.body.name.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
+
+	});
+
+	// you can also add properties with the . (dot) notation
+	if (req.body.reminderDate) {
+		newReminder.reminderDate = moment(req.body.reminderDate).toDate();
+	}
+
+	newReminder.tasks = req.body.tasks.split(",");
+
+
+		newReminder.save(function(err){
+		if (err) {
+			console.error("Error on saving new reminder");
+			console.error(err); // log out to Terminal all errors
+
+			var templateData = {
+				page_title : 'Save a new reminder',
+				errors : err.errors, 
+				astro : req.body
+			};
+
+			res.render('create_form.html', templateData);
+			// return res.send("There was an error when creating a new astronaut");
+
+		} else {
+			console.log("Created a new reminder!");
+			console.log(newAstro);
+			
+			// redirect to the astronaut's page
+			res.redirect('/reminders/'+ newReminder.slug)
+			}
+		});	
+	};
+
 exports.editAstroForm = function(req, res) {
 
 	// Get astronaut from URL params
@@ -261,6 +426,45 @@ exports.editAstroForm = function(req, res) {
 		} else {
 
 			console.log("unable to find astronaut: " + astro_id);
+			return res.status(404).render('404.html');
+		}
+
+	})
+
+}
+
+exports.editReminderForm = function(req, res) {
+
+	// Get astronaut from URL params
+	var reminder_id = req.params.reminder_id;
+	var reminderQuery = reminderModel.findOne({slug:reminder_id});
+	reminderQuery.exec(function(err, reminder){
+
+		if (err) {
+			console.error("ERROR");
+			console.error(err);
+			res.send("There was an error querying for "+ reminder_id).status(500);
+		}
+
+		if (reminder != null) {
+
+			// birthdateForm function for edit form
+			// html input type=date needs YYYY-MM-DD format
+			astronaut.reminderdateForm = function() {
+					return moment(this.reminderdate).format("YYYY-MM-DD");
+			}
+
+			// prepare template data
+			var templateData = {
+				reminder : reminder
+			};
+
+			// render template
+			res.render('edit_form.html',templateData);
+
+		} else {
+
+			console.log("unable to find reminder: " + reminder_id);
 			return res.status(404).render('404.html');
 		}
 
@@ -304,6 +508,43 @@ exports.updateAstro = function(req, res) {
 
 			// unable to find astronaut, return 404
 			console.error("unable to find astronaut: " + astro_id);
+			return res.status(404).render('404.html');
+		}
+	})
+}
+
+
+exports.updateReminder = function(req, res) {
+
+	// Get astronaut from URL params
+	var reminder_id = req.params.reminder_id;
+
+	// prepare form data
+	var updatedData = {
+		name : req.body.name,
+		reminderDate : moment(req.body.reminderDate).toDate(),
+		tasks : req.body.tasks.split(","),
+
+		walkedOnMoon : (req.body.walkedonmoon) ? true : false
+		
+	}
+
+
+	// query for astronaut
+	reminderModel.update({slug:reminder_id}, { $set: updatedData}, function(err, reminder){
+
+		if (err) {
+			console.error("ERROR: While updating");
+			console.error(err);			
+		}
+
+		if (reminder != null) {
+			res.redirect('/reminders/' + reminder_id);
+
+		} else {
+
+			// unable to find astronaut, return 404
+			console.error("unable to find reminder: " + reminder_id);
 			return res.status(404).render('404.html');
 		}
 	})
@@ -404,6 +645,52 @@ exports.deleteAstro = function(req,res) {
 	}
 };
 
+
+
+exports.deleteReminder = function(req,res) {
+
+	// Get astronaut from URL params
+	var reminder_id = req.params.reminder_id;
+
+	// if querystring has confirm=yes, delete record
+	// else display the confirm page
+
+	if (req.query.confirm == 'yes')  {  // ?confirm=yes
+	
+		reminderModel.remove({slug:reminder_id}, function(err){
+			if (err){ 
+				console.error(err);
+				res.send("Error when trying to remove reminder: "+ reminder_id);
+			}
+
+			res.send("Removed reminder. <a href='/'>Back to home</a>.");
+		});
+
+	} else {
+		//query reminder and display confirm page
+		reminderModel.findOne({slug:reminder_id}, function(err, reminder){
+
+			if (err) {
+				console.error("ERROR");
+				console.error(err);
+				res.send("There was an error querying for "+ reminder_id).status(500);
+			}
+
+			if (reminder != null) {
+
+				var templateData = {
+					reminder : reminder
+				};
+				
+				res.render('delete_confirm.html', templateData);
+			
+			}
+		})
+
+	}
+};
+
+
 exports.remote_api = function(req, res) {
 
 	var remote_api_url = 'http://itpdwdexpresstemplates.herokuapp.com/data/astronauts';
@@ -432,6 +719,46 @@ exports.remote_api = function(req, res) {
 			// prepare template data for remote_api_demo.html template
 			var templateData = {
 				astronauts : apiData.astros,
+				rawJSON : data, 
+				remote_url : remote_api_url
+			}
+
+			return res.render('remote_api_demo.html', templateData);
+		}	
+	})
+};
+
+
+
+
+exports.remote_api = function(req, res) {
+
+	var remote_api_url = 'http://itpdwdexpresstemplates.herokuapp.com/data/reminders';
+	// var remote_api_url = 'http://localhost:5000/data/astronauts';
+
+	// make a request to remote_api_url
+	request.get(remote_api_url, function(error, response, data){
+		
+		if (error){
+			res.send("There was an error requesting remote api url.");
+			return;
+		}
+
+		// Step 2 - convert 'data' to JS
+		// convert data JSON string to native JS object
+		var apiData = JSON.parse(data);
+
+		console.log(apiData);
+		console.log("***********");
+
+
+		// STEP 3  - check status / respond
+		// if apiData has property 'status == OK' then successful api request
+		if (apiData.status == 'OK') {
+
+			// prepare template data for remote_api_demo.html template
+			var templateData = {
+				reminders : apiData.astros,
 				rawJSON : data, 
 				remote_url : remote_api_url
 			}
