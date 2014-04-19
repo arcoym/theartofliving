@@ -2,28 +2,30 @@
 
 	<div class="span6">
 
-		<h1>ExpressJS + Templates Demo</h1>
+		<h1>The Art of Living</h1>
 		
-		<img src="http://i.imgur.com/ASfCs.gif" alt="Space shuttle animated gif crossing an LA highway">
-		
+		<!--<img src="http://i.imgur.com/ASfCs.gif" alt="Space shuttle animated gif crossing an LA highway">
+		-->
+
 		<hr>
 
 		<h3>{{pageTitle}}</h3>
 
-		<!-- astronaut loop -->
-		{{#astros}}
+		<!-- reminder loop -->
+		{{#reminder}}
 		
-		<li><a href="/astronauts/{{slug}}">{{name}}</a> - {{source.name}}</li>
+		<li><a href="/reminders/{{slug}}">{{reminder}}</a> - {{source.reminder}}</li>
 		
-		{{/astros}}
+		{{/reminder}}
 
 		<hr>
+
 		<p>
-			<a href="/create">Create a new astronaut</a>
+			<a href="/create">Create a new reminder</a>
 		</p>
 
 		<p>
-			<a href="/data/astronauts">Astronaut JSON</a>
+			<a href="/data/reminders">Reminder JSON</a>
 		</p>
 	</div>
 

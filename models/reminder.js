@@ -14,23 +14,14 @@ var nameValidation = function(val) {
 }
 
 
-// ship's log schema --> WHAT IS THIS?
-var shipLogSchema = new Schema({
-	date : Date,
-	content : String
-})
-
-
 // define new schema
 var reminderSchema = new Schema({
     slug : { type: String, lowercase: true, required: true, unique: true },
-	reminder : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
+	//reminder : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
+	reminder : { type: String, required: true },
 	reminderDate : Date,
-	photo : String,
-	tags : [String],
-	walkedOnMoon : Boolean,
+	tag: {type: String, lowercase: true, required: true, unique: true },
     posted : { type: Date, default: Date.now },
-	//shiplogs : [shipLogSchema]
 });
 
 

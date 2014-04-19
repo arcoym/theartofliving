@@ -74,26 +74,24 @@ var routes = require('./routes/index.js');
 
 app.get('/', routes.index);
 
-//new astronaut routes
-app.get('/create',routes.astroForm); //display form
-app.post('/create',routes.createAstro); //form POST submits here
+//new reminder routes
+app.get('/create',routes.reminderForm); //display form
+app.post('/create',routes.createReminder); //form POST submits here
 
 // display a single astronaut
-app.get('/astronauts/:astro_id', routes.detail);
+app.get('/reminders/:reminder_id', routes.detail);
 
 // edit astronaut
-app.get('/astronauts/:astro_id/edit', routes.editAstroForm); //GET display form
-app.post('/astronauts/:astro_id/edit', routes.updateAstro); //POST update database
+app.get('/reminders/:reminder_id/edit', routes.editReminderForm); //GET display form
+app.post('/reminders/:reminder_id/edit', routes.updateReminder); //POST update database
 
 // delete astronaut
-app.get('/astronauts/:astro_id/delete', routes.deleteAstro);
+app.get('/reminders/:reminder_id/delete', routes.deleteReminder);
 
-// add ship's log
-app.post('/astronauts/:astro_id/addshiplog', routes.postShipLog);
 
 // API JSON Data routes
-app.get('/data/astronauts',routes.data_all);
-app.get('/data/astronauts/:astro_id', routes.data_detail);
+app.get('/data/reminders',routes.data_all);
+app.get('/data/reminders/:reminder_id', routes.data_detail);
 
 // consume a remote API
 app.get('/remote_api_demo', routes.remote_api);

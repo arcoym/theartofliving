@@ -1,19 +1,10 @@
 <div class="row">
 	
 	<!-- first column w/ image-->
-	<div class="span4">
-		<img src="{{astro.photo}}" alt="photo of astronaut {{astro.name}}" class="img-polaroid" width="320px"><br>
-		
+	<div class="span4">		
 		<p>
-			source: 
-			<a href="{{astro.source.url}}" class="small">
-				{{astro.source.name}}
-			</a>
-
-			<br>
-
 			json:
-			<a href="/data/astronauts/{{astro.slug}}">/data/astronauts/{{astro.slug}}</a>
+			<a href="/data/reminders/{{reminder.slug}}">/data/reminders/{{reminder.slug}}</a>
 		</p>
 
 
@@ -21,52 +12,22 @@
 	
 	<!-- second column w/ details-->
 	<div class="span4">
-		<h2>{{astro.name}}</h2>
+		<h2>{{reminder.reminder}}</h2>
 		<hr>
 
 		<div>
-			Born:
-			{{#formatDate}}{{astro.birthdate}}{{/formatDate}}
+			Date Set:
+			{{#formatDate}}{{reminder.reminderDate}}{{/formatDate}}
 			<br>
 
-			Skills: {{astro.skills}}<br>
-			
-			Missions:
-			<ul>
-				{{#astro.missions}}
-				<li>{{.}}</li>
-				{{/astro.missions}}
-				{{^astro.missions}}
-				No missions yet.
-				{{/astro.missions}}
-			</ul>
+			Tags: {{reminder.tag}}<br>
+		
 		</div>
-
-		{{#astro.walkedOnMoon}}
-		<div>
-			<h3>WALKED ON THE MOON!</h3>
-			<img src="http://gifs.gifbin.com/062009/1246007745_michael_moonwalking.gif" alt="moonwalking animated gif with michael jackson">
-		</div>
-		{{/astro.walkedOnMoon}}
-
-		{{^astro.walkedOnMoon}}
-		NEVER GOT TO THE MOON :(
-		{{/astro.walkedOnMoon}}
 
 		<br><br>
-		<a href="/astronauts/{{astro.slug}}/edit" class="btn btn-info">edit</a>
-		
-		<hr>
-		<h3>Ship Logs</h3>
-		{{#astro.shiplogs}}
-			<i>{{date}}</i><br>
-			<p>{{content}}</p>
-			<hr>
-		{{/astro.shiplogs}}
+		<a href="/reminders/{{reminder.slug}}/edit" class="btn btn-info">edit</a>
 
-		{{^astro.shiplogs}}No logs{{/astro.shiplogs}}
-
-		<a href="#myModal" role="button" class="btn" data-toggle="modal">Add Log</a>
+		<!-- <a href="#myModal" role="button" class="btn" data-toggle="modal">Add Log</a>
 
 		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -94,23 +55,23 @@
 
 					<input type="submit" value="Add Log" class="btn btn-primary">
 				</form>
-			</div>
+			</div> 
 
-		</div>
+		</div> -->
 	</div>
 
 	<!-- third column w/ listings -->
 	<div class="span2">
-		<h3>Astronauts</h3>
+		<h3>Reminders</h3>
 		<hr>
-		{{#astros}}
+		{{#reminder}}
 		<li>
-			<a href="/astronauts/{{slug}}">{{name}}</a>
+			<a href="/reminders/{{slug}}">{{reminder}}</a>
 		</li>
-		{{/astros}}
+		{{/reminder}}
 
 		<br>
-		<a href="/create">Add new astronaut</a>
+		<a href="/create">Add new reminder</a>
 	</div>
 
 </div>
