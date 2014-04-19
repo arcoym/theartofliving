@@ -4,28 +4,24 @@
 
 		<h1>The Art of Living</h1>
 		
-		<!--<img src="http://i.imgur.com/ASfCs.gif" alt="Space shuttle animated gif crossing an LA highway">
-		-->
-
 		<hr>
 
 		<h3>{{pageTitle}}</h3>
 
-		<!-- reminder loop -->
-		{{#reminder}}
+		<!-- astronaut loop -->
+		{{#astros}}
 		
-		<li><a href="/reminders/{{slug}}">{{reminder}}</a> - {{source.reminder}}</li>
+		<li><a href="/astronauts/{{slug}}">{{reminder}}</a> - {{source.reminder}}</li>
 		
-		{{/reminder}}
+		{{/astros}}
 
 		<hr>
-
 		<p>
 			<a href="/create">Create a new reminder</a>
 		</p>
 
 		<p>
-			<a href="/data/reminders">Reminder JSON</a>
+			<a href="/data/astronauts">Reminder JSON</a>
 		</p>
 	</div>
 

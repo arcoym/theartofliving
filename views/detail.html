@@ -4,7 +4,7 @@
 	<div class="span4">		
 		<p>
 			json:
-			<a href="/data/reminders/{{reminder.slug}}">/data/reminders/{{reminder.slug}}</a>
+			<a href="/data/astronauts/{{astro.slug}}">/data/astronauts/{{astro.slug}}</a>
 		</p>
 
 
@@ -12,22 +12,21 @@
 	
 	<!-- second column w/ details-->
 	<div class="span4">
-		<h2>{{reminder.reminder}}</h2>
+		<h2>{{astro.reminder}}</h2>
 		<hr>
 
 		<div>
-			Date Set:
-			{{#formatDate}}{{reminder.reminderDate}}{{/formatDate}}
+			Born:
+			{{#formatDate}}{{astro.birthdate}}{{/formatDate}}
 			<br>
 
-			Tags: {{reminder.tag}}<br>
-		
-		</div>
+			Skills: {{astro.skills}}<br>
+			
 
 		<br><br>
-		<a href="/reminders/{{reminder.slug}}/edit" class="btn btn-info">edit</a>
+		<a href="/astronauts/{{astro.slug}}/edit" class="btn btn-info">edit</a>
 
-		<!-- <a href="#myModal" role="button" class="btn" data-toggle="modal">Add Log</a>
+		<a href="#myModal" role="button" class="btn" data-toggle="modal">Add Log</a>
 
 		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -55,23 +54,23 @@
 
 					<input type="submit" value="Add Log" class="btn btn-primary">
 				</form>
-			</div> 
+			</div>
 
-		</div> -->
+		</div>
 	</div>
 
 	<!-- third column w/ listings -->
 	<div class="span2">
-		<h3>Reminders</h3>
+		<h3>Astronauts</h3>
 		<hr>
-		{{#reminder}}
+		{{#astros}}
 		<li>
-			<a href="/reminders/{{slug}}">{{reminder}}</a>
+			<a href="/astronauts/{{slug}}">{{reminder}}</a>
 		</li>
-		{{/reminder}}
+		{{/astros}}
 
 		<br>
-		<a href="/create">Add new reminder</a>
+		<a href="/create">Add new astronaut</a>
 	</div>
 
 </div>

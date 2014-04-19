@@ -1,0 +1,43 @@
+<div class="row">
+	
+	<!-- first column w/ image-->
+	<div class="span4">		
+		<p>
+			json:
+			<a href="/data/reminders/{{reminder.slug}}">/data/reminders/{{reminder.slug}}</a>
+		</p>
+
+
+	</div>
+	
+	<!-- second column w/ details-->
+	<div class="span4">
+		<h2>{{reminder.reminder}}</h2>
+		<hr>
+
+		<div>
+			Date Set:
+			{{#formatDate}}{{reminder.reminderDate}}{{/formatDate}}
+			<br>
+
+			Tags: {{reminder.tag}}<br>
+		
+		</div>
+
+		<br><br>
+		<a href="/reminders/{{reminder.slug}}/edit" class="btn btn-info">edit</a>
+
+	</div>
+
+	<!-- third column w/ listings -->
+	<div class="span2">
+		<h3>Reminders</h3>
+		<hr>
+		{{#reminder}}
+		<li>
+			<a href="/reminders/{{slug}}">{{reminder}}</a>
+		</li>
+		{{/reminder}}
+	</div>
+
+</div>

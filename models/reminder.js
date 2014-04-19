@@ -20,10 +20,10 @@ var reminderSchema = new Schema({
 	//reminder : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
 	reminder : { type: String, required: true },
 	reminderDate : Date,
-	tag: {type: String, lowercase: true, required: true, unique: true },
+	tag: {type: String, lowercase: true, required: true},
     posted : { type: Date, default: Date.now },
 });
 
 
 // export 'Astronaut' model
-module.exports = mongoose.model('reminder',reminderSchema);
+module.exports = mongoose.model('reminders',reminderSchema);

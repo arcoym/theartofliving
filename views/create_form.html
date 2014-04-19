@@ -4,41 +4,59 @@
 
 		<form method="POST" action="/create">
 
-
 			<label for="thenamebox">
 				{{#errors.reminder}}
 				<span class="help-block alert alert-error">{{type}}</span>
 				{{/errors.reminder}}
 
-				Reminder <input type="text" name="reminder" class="required" id="thenamebox" value="{{reminder.reminder}}" required>
+				Reminder <input type="text" name="reminder" class="required" id="thenamebox" value="{{astro.reminder}}" required>
 				
 			</label>
 
 
-			<label for="reminderDate">
-				{{#errors.reminderDate}}
+			<label for="birthdate">
+				{{#errors.birthdate}}
 				<span class="help-block alert alert-error">{{type}}</span>
-				{{/errors.reminderDate}}
+				{{/errors.birthdate}}
 
-				ReminderDate <input type="date" name="reminderDate" id="reminderDate" value="{{reminder.reminderDate}}" required> 
+				Birthdate <input type="date" name="birthdate" id="birthdate" value="{{astro.birthdate}}"> 
+			</label>
+
+			<label for="skills">
+				{{#errors.skills}}
+				<span class="help-block alert alert-error">{{type}}</span>
+				{{/errors.skills}}
+
+				Skills <input type="text" name="skills" id="skills" value="{{astro.skills}}" required> 
+			</label>			
+
+			<label for="photoUrl">
+				{{#errors.photo}}
+				<span class="help-block alert alert-error">{{type}}</span>
+				{{/errors.photo}}
+
+				Photo URL <input type="text" name="photoUrl" id="photoUrl" value="{{astro.photoUrl}}"> 
 			</label>
 
 
-			<label for="tag">
-				{{#errors.tag}}
-				<span class="help-block alert alert-error">{{type}}</span>
-				{{/errors.tag}}
+			<label for="source_name">
+				Source name <input type="text" name="source_name" id="source_name" value="{{astro.source_name}}"> 
+			</label>
+			
+			<label for="source_url">
+				Source URL <input type="text" name="source_url" id="source_url" value="{{astro.source_url}}"> 
+			</label>
 
-				Tasks <input type="text" name="tag" id="tag" value="{{reminder.tag}}" required> 
+			<label for="walkedonmoon">
+				Has walked on moon? <input type="checkbox" name="walkedonmoon" id="walkedonmoon" {{#astro.walkedonmoon}}checked{{/astro.walkedonmoon}}> 
 			</label>
 
 			
-			<input type="submit" value="Add Reminder">
+			<input type="submit" value="Add Astronaut">
 
 		</form>
 	</div>
 </div>
-
 
 
 

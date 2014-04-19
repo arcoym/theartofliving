@@ -24,7 +24,7 @@ var shipLogSchema = new Schema({
 // define astronaut schema
 var AstronautSchema = new Schema({
     slug : { type: String, lowercase: true, required: true, unique: true },
-	name : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
+	reminder : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
 	birthdate : Date,
 	missions : [String],
 	photo : String,
@@ -32,10 +32,8 @@ var AstronautSchema = new Schema({
 		name : String,
 		url : String
 	},
-	skills : [String],
-	walkedOnMoon : Boolean,
+	tagz : [String],
     lastupdated : { type: Date, default: Date.now },
-    shiplogs : [shipLogSchema]
 });
 
 
