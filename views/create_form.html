@@ -14,12 +14,12 @@
 			</label>
 
 
-			<label for="birthdate">
-				{{#errors.birthdate}}
+			<label for="reminderDate">
+				{{#errors.reminderDate}}
 				<span class="help-block alert alert-error">{{type}}</span>
-				{{/errors.birthdate}}
+				{{/errors.reminderDate}}
 
-				Birthdate <input type="date" name="birthdate" id="birthdate" value="{{astro.birthdate}}"> 
+				Reminder Date <input type="date" name="reminderDate" id="reminderDate" value="{{astro.reimderDate}}"> 
 			</label>
 
 			<label for="skills">
@@ -47,8 +47,8 @@
 				Source URL <input type="text" name="source_url" id="source_url" value="{{astro.source_url}}"> 
 			</label>
 
-			<label for="walkedonmoon">
-				Has walked on moon? <input type="checkbox" name="walkedonmoon" id="walkedonmoon" {{#astro.walkedonmoon}}checked{{/astro.walkedonmoon}}> 
+			<label for="CanWalk">
+				Can Walk? <input type="checkbox" name="CanWalk" id="CanWalk" {{#astro.CanWalk}}checked{{/astro.CanWalk}}> 
 			</label>
 
 			

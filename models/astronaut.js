@@ -14,18 +14,11 @@ var nameValidation = function(val) {
 }
 
 
-// ship's log schema
-var shipLogSchema = new Schema({
-	date : Date,
-	content : String
-})
-
-
 // define astronaut schema
 var AstronautSchema = new Schema({
     slug : { type: String, lowercase: true, required: true, unique: true },
 	reminder : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
-	birthdate : Date,
+	reminderDate : Date,
 	missions : [String],
 	photo : String,
 	source : {

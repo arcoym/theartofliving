@@ -48,10 +48,10 @@ exports.index = function(req, res) {
 exports.data_all = function(req, res) {
 
 	astroQuery = astronautModel.find({}); // query for all astronauts
-	astroQuery.sort('-birthdate');
+	astroQuery.sort('-reminderDate');
 	
 	// display only 3 fields from astronaut data
-	astroQuery.select('reminder photo birthdate');
+	astroQuery.select('reminder photo reminderDate');
 	
 	astroQuery.exec(function(err, allAstros){
 		// prepare data for JSON
@@ -122,11 +122,11 @@ exports.detail = function(req, res) {
 		console.log("Found astro");
 		console.log(currentAstronaut.reminder);
 
-		// formattedBirthdate function for currentAstronaut
-		currentAstronaut.formattedBirthdate = function() {
+		// formattedReminderDate function for currentAstronaut
+		currentAstronaut.formattedReminderDate = function() {
 			// formatting a JS date with moment
 			// http://momentjs.com/docs/#/displaying/format/
-            return moment(this.birthdate).format("dddd, MMMM Do YYYY");
+            return moment(this.reminderDate).format("dddd, MMMM Do YYYY");
         };
 		
 		//query for all astronauts, return only name and slug
@@ -171,11 +171,11 @@ exports.data_detail = function(req, res) {
 		}
 
 
-		// formattedBirthdate function for currentAstronaut
-		currentAstronaut.formattedBirthdate = function() {
+		// formattedReminderDate function for currentAstronaut
+		currentAstronaut.formattedReminderDate = function() {
 			// formatting a JS date with moment
 			// http://momentjs.com/docs/#/displaying/format/
-            return moment(this.birthdate).format("dddd, MMMM Do YYYY");
+            return moment(this.reminderDate).format("dddd, MMMM Do YYYY");
         };
 		
 		//prepare JSON data for response
@@ -213,6 +213,10 @@ exports.createAstro = function(req, res) {
 
 	console.log(req.body);
 
+	//add a random number generator HERE
+	var lower = 1;
+	var upper = 9999;
+
 	// accept form post data
 	var newAstro = new astronautModel({
 		reminder : req.body.reminder,
@@ -221,16 +225,21 @@ exports.createAstro = function(req, res) {
 			name : req.body.source_name,
 			url : req.body.source_url
 		},
-		slug : req.body.reminder.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
+
+		//append random number here
+		slug : req.body.reminder.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')+(Math.floor(Math.random()*(upper-lower))+lower)
 
 	});
 
 	// you can also add properties with the . (dot) notation
-	if (req.body.birthdate) {
-		newAstro.birthdate = moment(req.body.birthdate).toDate();
+	if (req.body.reminderDate) {
+		newAstro.reminderDate = moment(req.body.reminderDate).toDate();
 	}
 
 	newAstro.skills = req.body.skills.split(",");
+
+	if (req.body.CanWalk) newAstro.skills.push("Can Walk");
+
 
 	// walked on moon checkbox
 	if (req.body.walkedonmoon) {
@@ -277,10 +286,10 @@ exports.editAstroForm = function(req, res) {
 
 		if (astronaut != null) {
 
-			// birthdateForm function for edit form
+			// reminderDateForm function for edit form
 			// html input type=date needs YYYY-MM-DD format
-			astronaut.birthdateForm = function() {
-					return moment(this.birthdate).format("YYYY-MM-DD");
+			astronaut.reminderDateForm = function() {
+					return moment(this.reminderDate).format("YYYY-MM-DD");
 			}
 
 			// prepare template data
@@ -314,7 +323,7 @@ exports.updateAstro = function(req, res) {
 			name : req.body.source_name,
 			url : req.body.source_url
 		},
-		birthdate : moment(req.body.birthdate).toDate(),
+		reminderDate : moment(req.body.reminderDate).toDate(),
 		skills : req.body.skills.split(","),
 
 		walkedOnMoon : (req.body.walkedonmoon) ? true : false
