@@ -32,7 +32,7 @@ var AstronautSchema = new Schema({
 		name : String,
 		url : String
 	},
-	tagz : [String],
+	skills : [String],
     lastupdated : { type: Date, default: Date.now },
 });
 
