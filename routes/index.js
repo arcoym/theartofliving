@@ -209,19 +209,19 @@ exports.astroForm = function(req, res){
 exports.createAstro = function(req, res) {
 	
 	console.log("received form submission");
-	console.log(req.body.reminderText);
+	console.log(req.body.reminder);
 
 	console.log(req.body);
 
 	// accept form post data
 	var newAstro = new astronautModel({
-		reminder : req.body.reminderText,
+		reminder : req.body.reminder,
 		photo : req.body.photoUrl,
 		source : {
 			name : req.body.source_name,
 			url : req.body.source_url
 		},
-		slug : req.body.reminderText.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
+		slug : req.body.reminder.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')
 
 	});
 
@@ -308,7 +308,7 @@ exports.updateAstro = function(req, res) {
 
 	// prepare form data
 	var updatedData = {
-		reminder : req.body.reminderText,
+		reminder : req.body.reminder,
 		photo : req.body.photoUrl,
 		source : {
 			name : req.body.source_name,
