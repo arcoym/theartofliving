@@ -19,13 +19,7 @@ var AstronautSchema = new Schema({
     slug : { type: String, lowercase: true, required: true, unique: true },
 	reminder : { type: String, required: true, validate: [nameValidation, 'Name must be at least 5 characters.']},
 	reminderDate : Date,
-	missions : [String],
-	photo : String,
-	source : {
-		name : String,
-		url : String
-	},
-	skills : [String],
+	tagz : [String],
     lastupdated : { type: Date, default: Date.now },
 });
 

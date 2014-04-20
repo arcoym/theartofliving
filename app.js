@@ -79,6 +79,9 @@ app.get('/create',routes.astroForm); //display form
 app.post('/create',routes.createAstro); //form POST submits here
 
 // display a single astronaut
+app.get('/reminderstoday', routes.remindersToday);
+
+// display a single astronaut
 app.get('/astronauts/:astro_id', routes.detail);
 
 // edit astronaut

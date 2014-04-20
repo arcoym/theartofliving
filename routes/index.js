@@ -25,7 +25,7 @@ exports.index = function(req, res) {
 	// 3) callback function with (err, results)
 	//    err will include any error that occurred
 	//	  allAstros is our resulting array of astronauts
-	astronautModel.find({}, 'reminder slug source', function(err, allAstros){
+	astronautModel.find({}, 'slug reminder reminderDate tagz', function(err, allAstros){
 
 		if (err) {
 			res.send("Unable to query database for astronauts").status(500);
@@ -36,7 +36,7 @@ exports.index = function(req, res) {
 		//build and render template
 		var templateData = {
 			astros : allAstros,
-			pageTitle : "NASA Astronauts (" + allAstros.length + ")"
+			pageTitle : "Reminders (" + allAstros.length + ")"
 		}
 
 		res.render('index.html', templateData);
@@ -51,7 +51,7 @@ exports.data_all = function(req, res) {
 	astroQuery.sort('-reminderDate');
 	
 	// display only 3 fields from astronaut data
-	astroQuery.select('reminder photo reminderDate');
+	astroQuery.select('reminder reminderDate slug');
 	
 	astroQuery.exec(function(err, allAstros){
 		// prepare data for JSON
@@ -69,33 +69,38 @@ exports.data_all = function(req, res) {
 
 /*
 	GET All reminders for today
-
+*/
 exports.remindersToday = function(req, res) {
+	
+		//make this get date
+		var d = Date.now();
 
-//make this get date
-	astronautModel.find({}, 'name slug source', function(err, allAstros){
+		var b = moment(d).toDate().toString().substring(3,15);
 
-var d = new Date();
-var month = d.getMonth()+1;
-var day = d.getDate();
-var todayDate = d.getFullYear() + ((''+month).length<2 ? '0' : '') + month + ((''+day).length<2 ? '0' : '') + day;
+	astronautModel.find({}, 'reminder reminderDate slug', function(err, allAstros){
+				
+		for (var i =8; i<allAstros.length; i++) {
+		
+		//console.log(allAstros[i].reminderDate.toString().substring(3,15));
+				console.log(b);
+		console.log(allAstros[i].reminderDate.toString().substring(3,15));
 
-		if (reminderDate == todayDate) {
-			res.send("Unable to query database for astronauts").status(500);
-		};
+			if(allAstros[i].reminderDate.toString().substring(3,15) == b) {
 
-		console.log("retrieved " + allAstros.length + " astronauts from database");
-
-		//build and render template
-		var templateData = {
-			astros : allAstros,
-			pageTitle : "NASA Astronauts (" + allAstros.length + ")"
+			//build and render template
+			var templateData = {
+				astros : allAstros[i],
+				pageTitle : "Reminders for Today (" + allAstros.length + ")"
+			}
 		}
 
-		res.render('index.html', templateData);
+	};
 
+		res.render('reminder_screen.html', templateData);
+
+	});
 }
-*/
+
 
 /*
 	GET /astronauts/:astro_id
@@ -130,7 +135,7 @@ exports.detail = function(req, res) {
         };
 		
 		//query for all astronauts, return only name and slug
-		astronautModel.find({}, 'reminder', function(err, allAstros){
+		astronautModel.find({}, 'reminder slug', function(err, allAstros){
 
 			console.log("retrieved all astronauts : " + allAstros.length);
 
@@ -197,7 +202,7 @@ exports.data_detail = function(req, res) {
 exports.astroForm = function(req, res){
 
 	var templateData = {
-		page_title : 'Enlist a new astronaut'
+		page_title : 'Create a New Reminder'
 	};
 
 	res.render('create_form.html', templateData);
@@ -220,11 +225,7 @@ exports.createAstro = function(req, res) {
 	// accept form post data
 	var newAstro = new astronautModel({
 		reminder : req.body.reminder,
-		photo : req.body.photoUrl,
-		source : {
-			name : req.body.source_name,
-			url : req.body.source_url
-		},
+		reminderDate : req.body.reminderDate,
 
 		//append random number here
 		slug : req.body.reminder.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'_')+(Math.floor(Math.random()*(upper-lower))+lower)
@@ -236,9 +237,20 @@ exports.createAstro = function(req, res) {
 		newAstro.reminderDate = moment(req.body.reminderDate).toDate();
 	}
 
-	newAstro.skills = req.body.skills.split(",");
+	newAstro.tagz = req.body.tagz.split(",");
+	
 
-	if (req.body.CanWalk) newAstro.skills.push("Can Walk");
+	// checkboxes for tags
+	if (req.body.family) newAstro.tagz.push("family");
+	if (req.body.mother) newAstro.tagz.push("mother");
+	if (req.body.daughter) newAstro.tagz.push("daughter");
+	if (req.body.father) newAstro.tagz.push("father");
+	if (req.body.son) newAstro.tagz.push("son");
+	if (req.body.birthday) newAstro.tagz.push("birthday");
+	if (req.body.anniversary) newAstro.tagz.push("anniversary");
+	if (req.body.appointment) newAstro.tagz.push("appointment");
+	if (req.body.todo) newAstro.tagz.push("todo");
+	if (req.body.events) newAstro.tagz.push("events");
 
 
 	// walked on moon checkbox
@@ -253,7 +265,7 @@ exports.createAstro = function(req, res) {
 			console.error(err); // log out to Terminal all errors
 
 			var templateData = {
-				page_title : 'Enlist a new astronaut',
+				page_title : 'Create a New Reminder',
 				errors : err.errors, 
 				astro : req.body
 			};
@@ -324,7 +336,7 @@ exports.updateAstro = function(req, res) {
 			url : req.body.source_url
 		},
 		reminderDate : moment(req.body.reminderDate).toDate(),
-		skills : req.body.skills.split(","),
+		tagz : req.body.tagz.split(","),
 
 		walkedOnMoon : (req.body.walkedonmoon) ? true : false
 		

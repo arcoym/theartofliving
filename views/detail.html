@@ -16,17 +16,18 @@
 		<hr>
 
 		<div>
-			Born:
-			{{astro.reminderDate}}
+			Reminder Date:
+			{{formatDate}}{{astro.reminderDate}}{{formatDate}}
 			<br>
 
-			Skills: {{astro.skills}}<br>
+			Tags: {{astro.tagz}}<br>
 			
 
-		<br><br>
+		<br>
+		<br>
 		<a href="/astronauts/{{astro.slug}}/edit" class="btn btn-info">edit</a>
-
-		<a href="#myModal" role="button" class="btn" data-toggle="modal">Add Log</a>
+		</div> 
+	<!--	<a href="#myModal" role="button" class="btn" data-toggle="modal">Add Log</a>
 
 		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
@@ -56,12 +57,11 @@
 				</form>
 			</div>
 
-		</div>
-	</div>
+		</div> -->
 
 	<!-- third column w/ listings -->
 	<div class="span2">
-		<h3>Astronauts</h3>
+		<h3>Reminders</h3>
 		<hr>
 		{{#astros}}
 		<li>
@@ -70,7 +70,7 @@
 		{{/astros}}
 
 		<br>
-		<a href="/create">Add new astronaut</a>
+		<a href="/create"><input type="submit" value="Add another reminder" class="btn"></a>
 	</div>
 
 </div>

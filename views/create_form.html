@@ -13,44 +13,52 @@
 				
 			</label>
 
-
 			<label for="reminderDate">
 				{{#errors.reminderDate}}
 				<span class="help-block alert alert-error">{{type}}</span>
 				{{/errors.reminderDate}}
 
-				Reminder Date <input type="date" name="reminderDate" id="reminderDate" value="{{astro.reimderDate}}"> 
+				Reminder Date <input type="date" name="reminderDate" id="reminderDate" value="{{astro.reminderDate}}"> 
 			</label>
 
-			<label for="skills">
-				{{#errors.skills}}
+			<h2>Tags</h2>
+			<label for="Family">
+				Family <input type="checkbox" name="family" id="family" {{#astro.family}}checked{{/astro.family}}> 
+			</label>
+			<label for="Mother">
+				Mother <input type="checkbox" name="mother" id="mother" {{#astro.mother}}checked{{/astro.mother}}> 
+			</label>
+			<label for="Daughter">
+				Daughter <input type="checkbox" name="daughter" id="daughter" {{#astro.daughter}}checked{{/astro.daughter}}> 
+			</label>
+			<label for="Father">
+				Father <input type="checkbox" name="father" id="father" {{#astro.father}}checked{{/astro.father}}> 
+			</label>
+			<label for="Son">
+				Son <input type="checkbox" name="son" id="son" {{#astro.son}}checked{{/astro.son}}> 
+			</label>
+			<label for="Birthday">
+				Birthday <input type="checkbox" name="birthday" id="birthday" {{#astro.birthday}}checked{{/astro.birthday}}> 
+			</label>
+			<label for="Anniversary">
+				Anniversary <input type="checkbox" name="anniversary" id="anniversary" {{#astro.anniversary}}checked{{/astro.anniversary}}> 
+			</label>
+			<label for="Appointment">
+				Appointment <input type="checkbox" name="appointment" id="appointment" {{#astro.appointment}}checked{{/astro.appointment}}> 
+			</label>
+			<label for="To Do">
+				To Do <input type="checkbox" name="todo" id="todo" {{#astro.todo}}checked{{/astro.todo}}> 
+			</label>
+			<label for="Event">
+				Event <input type="checkbox" name="events" id="events" {{#astro.events}}checked{{/astro.events}}> 
+			</label>
+
+			<label for="tagz">
+				{{#errors.tagz}}
 				<span class="help-block alert alert-error">{{type}}</span>
-				{{/errors.skills}}
-
-				Skills <input type="text" name="skills" id="skills" value="{{astro.skills}}" required> 
-			</label>			
-
-			<label for="photoUrl">
-				{{#errors.photo}}
-				<span class="help-block alert alert-error">{{type}}</span>
-				{{/errors.photo}}
-
-				Photo URL <input type="text" name="photoUrl" id="photoUrl" value="{{astro.photoUrl}}"> 
-			</label>
-
-
-			<label for="source_name">
-				Source name <input type="text" name="source_name" id="source_name" value="{{astro.source_name}}"> 
-			</label>
-			
-			<label for="source_url">
-				Source URL <input type="text" name="source_url" id="source_url" value="{{astro.source_url}}"> 
-			</label>
-
-			<label for="CanWalk">
-				Can Walk? <input type="checkbox" name="CanWalk" id="CanWalk" {{#astro.CanWalk}}checked{{/astro.CanWalk}}> 
-			</label>
-
+				{{/errors.tagz}}
+				Other: <input type="text" name="tagz" id="tagz" value="{{astro.tagz}}" required> 
+			</label>		
 			
 			<input type="submit" value="Add Astronaut">
 

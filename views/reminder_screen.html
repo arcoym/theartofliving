@@ -1,43 +1,19 @@
 <div class="row">
-	
-	<!-- first column w/ image-->
-	<div class="span4">		
-		<p>
-			json:
-			<a href="/data/reminders/{{reminder.slug}}">/data/reminders/{{reminder.slug}}</a>
-		</p>
 
-
-	</div>
-	
-	<!-- second column w/ details-->
-	<div class="span4">
-		<h2>{{reminder.reminder}}</h2>
-		<hr>
-
-		<div>
-			Date Set:
-			{{#formatDate}}{{reminder.reminderDate}}{{/formatDate}}
-			<br>
-
-			Tags: {{reminder.tag}}<br>
-		
-		</div>
-
-		<br><br>
-		<a href="/reminders/{{reminder.slug}}/edit" class="btn btn-info">edit</a>
-
-	</div>
-
-	<!-- third column w/ listings -->
 	<div class="span2">
-		<h3>Reminders</h3>
+
+		<iframe src="http://free.timeanddate.com/clock/i447zzjl/n179/fn17/fs34/ftb/pl4/pr0/pt4/pb4/tt0/tw1/ts1/tb4" frameborder="0" width="502" height="90"></iframe>
+
+		
+		<br>
+		<h3>Today's Reminders</h3>
 		<hr>
-		{{#reminder}}
+		{{#astros}}
 		<li>
-			<a href="/reminders/{{slug}}">{{reminder}}</a>
+			<a href="/astronauts/{{slug}}">{{reminder}}</a>
 		</li>
-		{{/reminder}}
+		{{/astros}}
+
 	</div>
 
 </div>
