@@ -77,25 +77,27 @@ exports.remindersToday = function(req, res) {
 
 		var b = moment(d).toDate().toString().substring(3,15);
 
+		var matchedReminders = [];
+
 	astronautModel.find({}, 'reminder reminderDate slug', function(err, allAstros){
 				
-		for (var i =8; i<allAstros.length; i++) {
+		for (var i =8; i<allAstros.length; i++) {			
 		
 		//console.log(allAstros[i].reminderDate.toString().substring(3,15));
-				console.log(b);
+		console.log(b);
 		console.log(allAstros[i].reminderDate.toString().substring(3,15));
 
 			if(allAstros[i].reminderDate.toString().substring(3,15) == b) {
+				matchedReminders.push(allAstros[i]);
 
 			//build and render template
 			var templateData = {
-				astros : allAstros[i],
-				pageTitle : "Reminders for Today (" + allAstros.length + ")"
-			}
+				reminds : matchedReminders,
+				pageTitle : "Reminders for Today (" + matchedReminders.length + ")"
+			} 
 		}
 
 	};
-
 		res.render('reminder_screen.html', templateData);
 
 	});
@@ -457,6 +459,37 @@ exports.deleteAstro = function(req,res) {
 
 	}
 };
+
+
+/*
+	GET /create
+*/
+exports.imageForm = function(req, res){
+
+	var templateData = {
+		page_title : 'Upload a New Image'
+	};
+
+	res.render('image_form.html', templateData);
+}
+
+/*
+	POST /create
+*/
+exports.saveImage = function(req, res) {
+	
+	console.log("received form submission");
+	console.log(req.body.imageTitle);
+
+	  res.body(format('\nuploaded %s (%d Kb) to %s as %s'
+    , req.files.image[0].name
+    , req.files.image[0].size / 1024 | 0
+    , req.files.image[0].path
+    , req.body.title));
+
+}
+
+
 
 exports.remote_api = function(req, res) {
 

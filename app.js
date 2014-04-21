@@ -7,7 +7,11 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
+var multiparty = require('multiparty');
+var util = require('util');
 
+
+var app = module.exports = express();
 
 // the ExpressJS App
 var app = express();
@@ -55,6 +59,19 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+// http.createServer(function(req,res) {
+//   if(req.url === '/upload' && req.method === 'POST') {
+//     var form = new multiparty.Form();
+
+//     form.parse(req, function(err, fields, files) {
+//       res.writeHead(200, {'content-type' : 'text/plain'});
+//       res.write('received upload:\n\n');
+//       res.end(util.inspect({fields : fields, files : files}));
+//     });
+//     return;
+//   }
+// });
+
 
 /* 
 SKIPPING FOR FUTURE CLASSES
@@ -73,6 +90,10 @@ COOKIEHASH in your .env file (also share with heroku)
 var routes = require('./routes/index.js');
 
 app.get('/', routes.index);
+
+//new image upload
+app.get('/upload', routes.imageForm); //display form
+app.post('/upload', routes.saveImage); //form POST submits here
 
 //new astronaut routes
 app.get('/create',routes.astroForm); //display form

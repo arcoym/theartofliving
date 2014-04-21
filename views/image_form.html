@@ -1,24 +1,25 @@
-<form role="form">
 
+<div class="row">
+  <div class="span8">
+  <h3>{{page_title}}</h3>
 
-  <div class="form-group">
-    <label for="imageTitle">ImageTitle</label>
-    <input type="text" class="form-control" id="imageTitle" placeholder="Enter Image Title">
+  <form action="http://166.78.159.225/~arc507/uploadFile_setup/upload_file.php" method="post" enctype="multipart/form-data">
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" /> 
+      <br />
+    <input type="submit" name="submit" value="Submit" />
+  </form>
+
+    <form method="post" enctype="multipart/form-data" action='/upload'>
+        <label for="imageTitle">ImageTitle</label>
+        <input name="imageTitle" type="text" class="form-control" id="imageTitle" placeholder="Enter Image Title">
+
+        <p>Image: <input type="file" name="image" /></p>
+        <p><input type="submit" value="Upload" class="btn btn-default"/></p>
+       <!-- <label for="Event">
+          Event <input type="checkbox" name="events" id="events" {{#astro.events}}checked{{/astro.events}}> 
+        </label> -->
+
+    </form>
   </div>
-
-
-  <div class="form-group">
-    <label for="inputFile">File input</label>
-    <input type="file" id="inputFile">
-    <p class="help-block">Example block-level help text here.</p>
-  </div>
-
-  <div class="checkbox">
-    <label> <input type="checkbox" id="tag"> Tag1 </label>
-    <label> <input type="checkbox" id="tag"> Tag2 </label>
-    <label> <input type="checkbox" id="tag"> Tag3 </label>
-    <label> <input type="checkbox" id="tag"> Tag4 </label>
-  </div>
-
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
+</div>
